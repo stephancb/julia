@@ -14,7 +14,13 @@ differences that may trip up Julia users accustomed to MATLAB:
 
 -  Arrays are indexed with square brackets, ``A[i,j]``.
 -  Arrays are assigned by reference. After ``A=B``, assigning into ``B``
-   will modify ``A`` as well.
+   will modify ``A`` as well, the same is true after ``A=reshape(B, ...)``.
+   In Matlab assignment and the reshape function are equivalent to ``A=copy(B)``
+   and    ``A=reshape(copy(B), ...)``, respectively. In Julia assignment
+   conceptually creates another pointer to a value array, and the reshape
+   function a different view of it. But beware, e.g. ``A+=0``, which does
+   not exist in Matlab, is in Julia equivalent to A=copy(A)+0, thereafter
+   assigning into ``B`` does not modify ``A`` any more.
 -  Values are passed and assigned by reference. If a function modifies
    an array, the changes will be visible in the caller.
 -  Matlab combines allocation and assignment into single statements,
